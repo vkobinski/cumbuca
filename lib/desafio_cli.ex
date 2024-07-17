@@ -15,19 +15,29 @@ defmodule DesafioCli do
     input_loop([])
   end
 
+  def output(names) do
+    {_, list} =
+      Enum.reduce(
+        names,
+        {%{}, []},
+        fn name, {acc, list} ->
+          acc = Map.update(acc, name, 1, &(&1 + 1))
+
+          list = list ++ [Enum.join([name, RomanNumerals.to_roman(Map.get(acc, name))], " ")]
+
+          {acc, list}
+        end
+      )
+
+    list
+  end
+
   def input_loop(names) do
     name = IO.gets("")
 
     if name == "\n" do
-      Enum.reduce(
-        names,
-        %{},
-        fn name, acc ->
-          acc = Map.update(acc, name, 1, &(&1 + 1))
-          IO.puts(Enum.join([name, RomanNumerals.to_roman(Map.get(acc, name))], " "))
-          acc
-        end
-      )
+      list = output(names)
+      Enum.each(list, fn item -> IO.puts(item) end)
     else
       input_loop(names ++ [String.trim(name)])
     end
