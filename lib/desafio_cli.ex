@@ -23,7 +23,9 @@ defmodule DesafioCli do
         fn name, {acc, list} ->
           acc = Map.update(acc, name, 1, &(&1 + 1))
 
-          list = list ++ [Enum.join([name, RomanNumerals.to_roman(Map.get(acc, name))], " ")]
+          number = RomanNumerals.to_roman(Map.get(acc, name))
+
+          list = list ++ ["#{name} #{number}"]
 
           {acc, list}
         end
